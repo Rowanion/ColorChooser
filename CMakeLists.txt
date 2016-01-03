@@ -1,9 +1,6 @@
-cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 project(ColorChooser)
-
-find_package(Qt4 COMPONENTS QtCore QtGui QtNetwork QtXml REQUIRED)
-include(${QT_USE_FILE})
 
 #######################################################################
 # cmake includes
@@ -25,10 +22,15 @@ endif()
 
 #######################################################################
 ## Libs and project settings
-setupQt(QT_DIRECTORY)
 
 #######################################################################
 ## 3rdParty Libs
+
+setupQt5()
+
+useQt5Module( Core )
+useQt5Module( Gui )
+useQt5Module( Widgets )
 
 #######################################################################
 ## This project's sources
@@ -44,9 +46,7 @@ include_directories(
 addFilesInSubdir( src )
 addFilesInSubdir( src/ui )
 
-set(${PROJECT_NAME}_UIS
-	src/ui/ColorChooser.ui
-)
+addUiInSubdir( src/ui )
 
 # set(${PROJECT_NAME}_RESOURCES 
 # 	resources/qt_html.qrc
@@ -60,8 +60,7 @@ QT4_ADD_TRANSLATION(${PROJECT_NAME}_QM_FILES ${${PROJECT_NAME}_TS_FILES})
 # here you should add all libraries this project links to.
 # Qt-stuff is already included!
 set(${PROJECT_NAME}_LINK_LIBS
-    ${QT_QTMAIN_LIBRARY}
-    ${QT_LIBRARIES}
+    ${QT5_LINK_LIBS}
 )
 
 IF(WIN32)
@@ -72,15 +71,15 @@ IF(WIN32)
 ENDIF()
 
 # create the mocs - output is .moc_basename.cxx instead of .moc!
-detectMocs(FILE_TO_MOC ${${PROJECT_NAME}_HEADER_FILES}) 
-qt4_wrap_cpp(${PROJECT_NAME}_MOC ${FILE_TO_MOC})
+# detectMocs(FILE_TO_MOC ${${PROJECT_NAME}_HEADER_FILES}) 
+# qt5_wrap_cpp(${PROJECT_NAME}_MOC ${FILE_TO_MOC})
 
 # create the UI-headers
-qt4_wrap_ui(${PROJECT_NAME}_UIS_H ${${PROJECT_NAME}_UIS})
+qt5_wrap_ui(${PROJECT_NAME}_UIS_H ${${PROJECT_NAME}_UIS})
 
 # compile the resource files
 
-qt4_add_resources(${PROJECT_NAME}_RESOURCES_CPP ${${PROJECT_NAME}_RESOURCES})
+qt5_add_resources(${PROJECT_NAME}_RESOURCES_CPP ${${PROJECT_NAME}_RESOURCES})
 # create groups for our generated files and source files.
 setupGroupFolders()
 
@@ -89,7 +88,6 @@ setupGroupFolders()
 add_executable(${PROJECT_NAME} ${BINARY_PROPERTIES}
 	${${PROJECT_NAME}_SOURCE_FILES}
 	${${PROJECT_NAME}_HEADER_FILES}
-	${${PROJECT_NAME}_MOC}
 	${${PROJECT_NAME}_UIS_H}
     ${${PROJECT_NAME}_RESOURCES_CPP}
     ${${PROJECT_NAME}_WIN_RESOURCES}
@@ -112,3 +110,13 @@ INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/)
 
 INSTALL(FILES ${${PROJECT_NAME}_QM_FILES} DESTINATION
 	${CMAKE_INSTALL_PREFIX})
+
+if( WIN32 )
+	install( FILES
+        ${QT5_LOCATIONS}
+
+        DESTINATION ${CMAKE_INSTALL_PREFIX}
+
+        CONFIGURATIONS RELEASE
+)
+endif()

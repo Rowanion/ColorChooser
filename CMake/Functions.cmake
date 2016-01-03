@@ -59,6 +59,37 @@ function(setupQt directory)
   endif()
 endfunction()
 #######################################################################
+function(setupQt directory)
+  if(DEFINED ${directory})
+    # TODO: implement this manually
+  endif()
+endfunction()
+
+macro( setupQt5 )
+  # STRING(REGEX REPLACE "\\" "\\\\" THE_DIR ${directory} )
+  # if( ${directory} STREQUAL "" )
+  #   set( THE_DIR "C:/Qt/Qt5.5.0/5.5/msvc2013" )
+  # endif()
+  # set( QT5_ROOT_DIR ${THE_DIR} CACHE PATH "The root path for Qt5 in which one can find directories like bin, lib, include, etc" )
+  # list( APPEND CMAKE_PREFIX_PATH ${QT5_ROOT_DIR} )
+  # Tell CMake to run moc when necessary:
+  set( CMAKE_AUTOMOC ON )
+  # As moc files are generated in the binary dir, tell CMake
+  # to always look for includes there:
+  set( CMAKE_INCLUDE_CURRENT_DIR ON )
+endmacro()
+
+macro( useQt5Module moduleName )
+  find_package(Qt5${moduleName} REQUIRED)
+  include_directories( ${Qt5${moduleName}_INCLUDE_DIRS} )
+  add_definitions( ${Qt5${moduleName}_DEFINITIONS} )
+  mark_as_advanced( Qt5${moduleName}_DIR )
+  get_target_property( Qt${moduleName}_location Qt5::${moduleName} LOCATION )
+  list( APPEND QT5_LINK_LIBS ${Qt5${moduleName}_LIBRARIES} )
+  list( APPEND QT5_LOCATIONS ${Qt${moduleName}_location} )
+endmacro()
+
+#######################################################################
 #
 # export file: copy it to the build tree on every build invocation and add rule for installation
 #
@@ -139,6 +170,28 @@ MACRO(addFilesInSubdir _subdir)
   SET( ${PROJECT_NAME}_FILES_TEMP_SRC "")
   SET( ${PROJECT_NAME}_FILES_TEMP_HEADER "")
 ENDMACRO()
+
+#######################################################################
+## add all ui files in the given dir to the project
+#######################################################################
+macro(addUiInSubdir _subdir)
+  # source files
+  file(GLOB ${PROJECT_NAME}_FILES_TEMP_UIS
+    ${CMAKE_CURRENT_SOURCE_DIR}/${_subdir}/*.ui
+  )
+
+  # append all found files to the global var
+  foreach(TEMP_FILE ${${PROJECT_NAME}_FILES_TEMP_UIS})
+    list(APPEND ${PROJECT_NAME}_UIS ${TEMP_FILE})
+  endforeach()
+
+  # use some regex magic to satisfy MSVC's needs
+  STRING(REGEX REPLACE "/" "\\\\" MS_SUBDIR ${_subdir} )
+  source_group("${MS_SUBDIR}" FILES ${${PROJECT_NAME}_FILES_TEMP_SRC})
+  source_group("${MS_SUBDIR}" FILES ${${PROJECT_NAME}_FILES_TEMP_HEADER})
+  set( ${PROJECT_NAME}_FILES_TEMP_SRC "")
+  set( ${PROJECT_NAME}_FILES_TEMP_HEADER "")
+endmacro()
 
 # #######################################################################
 macro(QT4_ADD_TRANSLATION _qm_files)

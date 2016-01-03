@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QtWidgets/QMainWindow>
+#include "ui_ColorChooser.h"
 
 class ColorChooser : public QMainWindow, public Ui_ColorChooser
 {
