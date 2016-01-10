@@ -32,6 +32,11 @@ useQt5Module( Core )
 useQt5Module( Gui )
 useQt5Module( Widgets )
 
+if( WIN32 )
+	useQt5Module( WinExtras )
+	get_target_property( QtPlatformPlugin_location Qt5::QWindowsIntegrationPlugin LOCATION )
+endif()
+
 #######################################################################
 ## This project's sources
 
@@ -64,9 +69,9 @@ set(${PROJECT_NAME}_LINK_LIBS
 )
 
 IF(WIN32)
-	# set(${PROJECT_NAME}_WIN_RESOURCES 
-	# 	resources/win_icon.rc
-	# )
+	set(${PROJECT_NAME}_WIN_RESOURCES 
+	 	resources/win_icon.rc
+	)
 	set(BINARY_PROPERTIES WIN32)
 ENDIF()
 
@@ -118,5 +123,11 @@ if( WIN32 )
         DESTINATION ${CMAKE_INSTALL_PREFIX}
 
         CONFIGURATIONS RELEASE
-)
+	)
+	install( FILES
+		${QtPlatformPlugin_location}
+		DESTINATION ${CMAKE_INSTALL_PREFIX}/platforms
+		CONFIGURATIONS RELEASE
+	)
+
 endif()
