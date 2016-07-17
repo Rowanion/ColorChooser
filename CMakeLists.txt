@@ -11,6 +11,7 @@ include(Functions)
 #######################################################################
 ## global configs ##
 
+set( CMAKE_CXX_STANDARD 11 )
 setupCompiler()
 
 # change default value for install target
