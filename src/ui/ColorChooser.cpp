@@ -22,9 +22,11 @@ ColorChooser::ColorChooser(QWidget* parent)
 	tableView->setModel( m_model );
 	tableView->setContextMenuPolicy( Qt::CustomContextMenu );
 	connect( tableView, &QTableView::customContextMenuRequested, this, &ColorChooser::onCustomContextMenu );
+	QHeaderView* verticalHeader = tableView->verticalHeader();
+	verticalHeader->setContextMenuPolicy( Qt::CustomContextMenu );
+	connect( verticalHeader, &QHeaderView::customContextMenuRequested, this, &ColorChooser::onCustomContextMenu );
+
 	connect( pb_editor, &QPushButton::clicked, m_colorEditor, &ColorEditor::show );
-//m_colorEditor->show();
-	//m_colorEditor->setOptions( QColorDialog::ShowAlphaChannel | QColorDialog::NoButtons | QColorDialog::DontUseNativeDialog );
 
 	QStringList names( QColor::colorNames() );
 	m_model->setVerticalHeaderLabels(names);
