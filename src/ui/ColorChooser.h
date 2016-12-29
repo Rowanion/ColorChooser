@@ -16,8 +16,11 @@ private slots:
 	void copyName();
 	void copyHexRGBColor();
 	void copyHexARGBColor();
+	void copyByteRGBColor();
+	void copyFloatRGBColor();
 
 private:
 	class QStandardItemModel* m_model{ nullptr };
 	QString m_currentColor;
+	class ColorEditor* m_colorEditor = nullptr;
 };

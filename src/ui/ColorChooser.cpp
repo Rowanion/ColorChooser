@@ -8,9 +8,12 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QApplication>
 #include <QtGui/QPainter>
+#include <QtWidgets/QColorDialog>
+#include "ColorEditor.h"
 
 ColorChooser::ColorChooser(QWidget* parent)
 : QMainWindow(parent)
+, m_colorEditor(new ColorEditor(this))
 {
 	setupUi(this);
 
@@ -19,7 +22,9 @@ ColorChooser::ColorChooser(QWidget* parent)
 	tableView->setModel( m_model );
 	tableView->setContextMenuPolicy( Qt::CustomContextMenu );
 	connect( tableView, &QTableView::customContextMenuRequested, this, &ColorChooser::onCustomContextMenu );
-
+	connect( pb_editor, &QPushButton::clicked, m_colorEditor, &ColorEditor::show );
+//m_colorEditor->show();
+	//m_colorEditor->setOptions( QColorDialog::ShowAlphaChannel | QColorDialog::NoButtons | QColorDialog::DontUseNativeDialog );
 
 	QStringList names( QColor::colorNames() );
 	m_model->setVerticalHeaderLabels(names);
@@ -62,6 +67,8 @@ void ColorChooser::onCustomContextMenu( const QPoint & point )
 	conextMenu.addAction( anIcon, QLatin1String( "copy color name" ), this, SLOT( copyName() ) );
 	conextMenu.addAction( anIcon, QLatin1String( "copy as #RRGGBB" ), this, SLOT( copyHexRGBColor() ) );
 	conextMenu.addAction( anIcon, QLatin1String( "copy as ##AARRGGBB" ), this, SLOT( copyHexARGBColor() ) );
+	conextMenu.addAction( anIcon, QLatin1String( "copy as Byte (r, g, b)" ), this, SLOT( copyByteRGBColor() ) );
+	conextMenu.addAction( anIcon, QLatin1String( "copy as Float (r, g, b)" ), this, SLOT( copyFloatRGBColor() ) );
 
 	conextMenu.exec( QCursor::pos() );
 }
@@ -81,4 +88,20 @@ void ColorChooser::copyHexARGBColor()
 {
 	QColor color( m_currentColor );
 	QApplication::clipboard()->setText( color.name( QColor::HexArgb ) );
+}
+
+void ColorChooser::copyByteRGBColor()
+{
+	QColor color( m_currentColor );
+	int rgb[3];
+	color.getRgb(rgb, rgb+1, rgb+2);
+	QApplication::clipboard()->setText( QString( "( %1, %2, %3 )" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+}
+
+void ColorChooser::copyFloatRGBColor()
+{
+	QColor color( m_currentColor );
+	qreal rgb[3];
+	color.getRgbF(rgb, rgb+1, rgb+2);
+	QApplication::clipboard()->setText( QString( "( %1, %2, %3 )" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
 }
