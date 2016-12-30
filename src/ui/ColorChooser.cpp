@@ -18,6 +18,7 @@ ColorChooser::ColorChooser(QWidget* parent)
 	setupUi(this);
 
 	w_colorEditor->setVisible( false );
+	line->setVisible( false );
 
 	// setup the table
 	m_model = new QStandardItemModel(this);
@@ -27,9 +28,9 @@ ColorChooser::ColorChooser(QWidget* parent)
 	QHeaderView* verticalHeader = tableView->verticalHeader();
 	verticalHeader->setContextMenuPolicy( Qt::CustomContextMenu );
 	connect( verticalHeader, &QHeaderView::customContextMenuRequested, this, &ColorChooser::onCustomContextMenu );
-
 	connect( cb_showEditor, &QCheckBox::toggled, w_colorEditor, &ColorEditor::setVisible );
-
+	connect( cb_showEditor, &QCheckBox::toggled, line, &QFrame::setVisible );
+	
 	QStringList names( QColor::colorNames() );
 	m_model->setVerticalHeaderLabels(names);
 

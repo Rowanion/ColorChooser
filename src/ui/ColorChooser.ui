@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>343</width>
-    <height>424</height>
+    <height>489</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -91,6 +91,13 @@
        </widget>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="ColorEditor" name="w_colorEditor" native="true"/>
