@@ -3,7 +3,7 @@
 #include <QtWidgets/QColorDialog>
 
 ColorEditor::ColorEditor( QWidget* parent )
-: QDialog( parent )
+: QWidget( parent )
 , m_qtDialog( new QColorDialog(this) )
 {
 	setupUi( this );

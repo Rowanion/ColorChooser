@@ -10,12 +10,14 @@
 #include <QtGui/QPainter>
 #include <QtWidgets/QColorDialog>
 #include "ColorEditor.h"
+#include <QtWidgets/QCheckBox>
 
 ColorChooser::ColorChooser(QWidget* parent)
 : QMainWindow(parent)
-, m_colorEditor(new ColorEditor(this))
 {
 	setupUi(this);
+
+	w_colorEditor->setVisible( false );
 
 	// setup the table
 	m_model = new QStandardItemModel(this);
@@ -26,7 +28,7 @@ ColorChooser::ColorChooser(QWidget* parent)
 	verticalHeader->setContextMenuPolicy( Qt::CustomContextMenu );
 	connect( verticalHeader, &QHeaderView::customContextMenuRequested, this, &ColorChooser::onCustomContextMenu );
 
-	connect( pb_editor, &QPushButton::clicked, m_colorEditor, &ColorEditor::show );
+	connect( cb_showEditor, &QCheckBox::toggled, w_colorEditor, &ColorEditor::setVisible );
 
 	QStringList names( QColor::colorNames() );
 	m_model->setVerticalHeaderLabels(names);

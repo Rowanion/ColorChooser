@@ -1,11 +1,11 @@
 #pragma once
 
-#include <QtWidgets/QDialog>
+#include <QtWidgets/QWidget>
 #include "ui_ColorEditor.h"
 
 constexpr float g_fraction = 1.0f / 255.0f;
 
-class ColorEditor : public QDialog, public Ui_ColorEditor
+class ColorEditor : public QWidget, public Ui_ColorEditor
 {
 	Q_OBJECT
 public:
