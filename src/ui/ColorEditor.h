@@ -11,7 +11,8 @@ class ColorEditor : public QWidget, public Ui_ColorEditor
 public:
 	ColorEditor( QWidget* parent = nullptr );
 	virtual ~ColorEditor() = default;
-
+	void setCurrentColor( const QColor& pColor );
+	
 private slots:
 	void onDialogColorChanged( const QColor &color );
 	void onFloatColorChanged( double pValue );

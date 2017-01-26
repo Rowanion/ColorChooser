@@ -18,6 +18,7 @@ private slots:
 	void copyHexARGBColor();
 	void copyByteRGBColor();
 	void copyFloatRGBColor();
+	void onTableClicked( const QModelIndex& pIndex );
 
 private:
 	class QStandardItemModel* m_model{ nullptr };

@@ -78,3 +78,8 @@ void ColorEditor::onAHTMLChanged( const QString& text )
 		m_qtDialog->setCurrentColor( col );
 	}
 }
+
+void ColorEditor::setCurrentColor( const QColor& pColor )
+{
+	m_qtDialog->setCurrentColor( pColor );
+}
