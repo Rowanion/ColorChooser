@@ -15,7 +15,15 @@
 ColorChooser::ColorChooser(QWidget* parent)
 : QMainWindow(parent)
 {
+
+	// force dot as comma for QDoubleSpinBox and float conversion
+	setLocale( QLocale(QLatin1String("C")) );
+
 	setupUi(this);
+
+	//TODO: implement
+	l_filter->setVisible( false );
+	le_filter->setVisible( false );
 
 	w_colorEditor->setVisible( false );
 	line->setVisible( false );
@@ -30,6 +38,7 @@ ColorChooser::ColorChooser(QWidget* parent)
 	connect( verticalHeader, &QHeaderView::customContextMenuRequested, this, &ColorChooser::onCustomContextMenu );
 	connect( cb_showEditor, &QCheckBox::toggled, w_colorEditor, &ColorEditor::setVisible );
 	connect( cb_showEditor, &QCheckBox::toggled, line, &QFrame::setVisible );
+	connect( tableView, SIGNAL( clicked( const QModelIndex & ) ), this, SLOT( onTableClicked( const QModelIndex & ) ) );
 	
 	QStringList names( QColor::colorNames() );
 	m_model->setVerticalHeaderLabels(names);
@@ -100,7 +109,7 @@ void ColorChooser::copyByteRGBColor()
 	QColor color( m_currentColor );
 	int rgb[3];
 	color.getRgb(rgb, rgb+1, rgb+2);
-	QApplication::clipboard()->setText( QString( "( %1, %2, %3 )" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+	QApplication::clipboard()->setText( QString( "%1, %2, %3" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
 }
 
 void ColorChooser::copyFloatRGBColor()
@@ -108,5 +117,11 @@ void ColorChooser::copyFloatRGBColor()
 	QColor color( m_currentColor );
 	qreal rgb[3];
 	color.getRgbF(rgb, rgb+1, rgb+2);
-	QApplication::clipboard()->setText( QString( "( %1, %2, %3 )" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+	QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+}
+
+void ColorChooser::onTableClicked( const QModelIndex& pIndex )
+{
+	m_currentColor = m_model->data( m_model->index( pIndex.row(), 0 ), Qt::UserRole ).toString();
+	w_colorEditor->setCurrentColor( QColor( m_currentColor ) );
 }
