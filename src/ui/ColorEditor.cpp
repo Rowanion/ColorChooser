@@ -24,6 +24,7 @@ ColorEditor::ColorEditor( QWidget* parent )
 	connect( dsb_ligHSL, SIGNAL( valueChanged( double ) ), SLOT( onHSLChanged( double ) ) );
 
 	connect( le_htmlA, &QLineEdit::textChanged, this, &ColorEditor::onAHTMLChanged);
+	setCurrentColor( QColor(0, 0, 0, 255) );
 }
 
 void ColorEditor::onDialogColorChanged( const QColor &color )
@@ -100,8 +101,6 @@ void ColorEditor::setCurrentColor( const QColor& pColor )
 void ColorEditor::onHSLChanged( double pValue )
 {
 	QColor col(m_qtDialog->currentColor());
-	
 	col.setHslF( dsb_hueHSL->value() / 359.0, dsb_satHSL->value(), dsb_ligHSL->value() );
-	// ...
 	m_qtDialog->setCurrentColor( col );
 }
