@@ -77,14 +77,14 @@ void ColorChooser::onCustomContextMenu( const QPoint & point )
 	QIcon anIcon( pixmap );
 
 	//set context menu
-	QMenu conextMenu( tableView );
-	conextMenu.addAction( anIcon, QLatin1String( "copy color name" ), this, SLOT( copyName() ) );
-	conextMenu.addAction( anIcon, QLatin1String( "copy as #RRGGBB" ), this, SLOT( copyHexRGBColor() ) );
-	conextMenu.addAction( anIcon, QLatin1String( "copy as ##AARRGGBB" ), this, SLOT( copyHexARGBColor() ) );
-	conextMenu.addAction( anIcon, QLatin1String( "copy as Byte (r, g, b)" ), this, SLOT( copyByteRGBColor() ) );
-	conextMenu.addAction( anIcon, QLatin1String( "copy as Float (r, g, b)" ), this, SLOT( copyFloatRGBColor() ) );
+	QMenu contextMenu( tableView );
+	contextMenu.addAction( anIcon, QLatin1String( "copy color name" ), this, SLOT( copyName() ) );
+	contextMenu.addAction( anIcon, QLatin1String( "copy as #RRGGBB" ), this, SLOT( copyHexRGBColor() ) );
+	contextMenu.addAction( anIcon, QLatin1String( "copy as #AARRGGBB" ), this, SLOT( copyHexARGBColor() ) );
+	contextMenu.addAction( anIcon, QLatin1String( "copy as Byte (r, g, b)" ), this, SLOT( copyByteRGBColor() ) );
+	contextMenu.addAction( anIcon, QLatin1String( "copy as Float (r, g, b)" ), this, SLOT( copyFloatRGBColor() ) );
 
-	conextMenu.exec( QCursor::pos() );
+	contextMenu.exec( QCursor::pos() );
 }
 
 void ColorChooser::copyName()
