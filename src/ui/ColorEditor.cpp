@@ -1,6 +1,7 @@
 #include "ColorEditor.h"
 
 #include <QtWidgets/QColorDialog>
+#include <QtGui/QClipboard>
 
 ColorEditor::ColorEditor( QWidget* parent )
 : QWidget( parent )
@@ -13,6 +14,8 @@ ColorEditor::ColorEditor( QWidget* parent )
 
 	onDialogColorChanged( m_qtDialog->currentColor() );
 	connect( m_qtDialog, &QColorDialog::currentColorChanged, this, &ColorEditor::onDialogColorChanged );
+
+	connect( cbb_actions, SIGNAL( currentIndexChanged(int) ), this, SLOT( onActionSelected(int) ) );
 
 	connect( dsb_red, SIGNAL(valueChanged(double) ), SLOT(onFloatColorChanged(double) ) );
 	connect( dsb_green, SIGNAL( valueChanged( double ) ), SLOT( onFloatColorChanged( double ) ) );
@@ -103,4 +106,37 @@ void ColorEditor::onHSLChanged( double pValue )
 	QColor col(m_qtDialog->currentColor());
 	col.setHslF( dsb_hueHSL->value() / 359.0, dsb_satHSL->value(), dsb_ligHSL->value() );
 	m_qtDialog->setCurrentColor( col );
+}
+
+void ColorEditor::onActionSelected( int pIdx )
+{
+	switch(pIdx)
+	{
+		case 0:	// copy as #RRGGBB
+			QApplication::clipboard()->setText( m_qtDialog->currentColor().name( QColor::HexRgb ) );
+		break;
+		case 1: // copy as #AARRGGBB
+			QApplication::clipboard()->setText( m_qtDialog->currentColor().name( QColor::HexArgb ) );
+		break;
+		case 2: // copy as Byte (r, g, b)
+		{
+			QColor color( m_qtDialog->currentColor() );
+			int rgb[3];
+			color.getRgb(rgb, rgb+1, rgb+2);
+			QApplication::clipboard()->setText( QString( "%1, %2, %3" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+		}
+		break;
+		case 3: // copy as Float (r, g, b)
+		{
+			QColor color( m_qtDialog->currentColor() );
+			qreal rgb[3];
+			color.getRgbF(rgb, rgb+1, rgb+2);
+			QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+		}
+		break;
+	}
+	
+	cbb_actions->blockSignals( true );
+	cbb_actions->setCurrentIndex( -1 );
+	cbb_actions->blockSignals( false );
 }

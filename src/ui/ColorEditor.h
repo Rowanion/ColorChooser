@@ -18,6 +18,7 @@ private slots:
 	void onFloatColorChanged( double pValue );
 	void onAHTMLChanged( const QString& text );
 	void onHSLChanged( double pValue );
+	void onActionSelected( int pIdx );
 
 private:
 	class QColorDialog* m_qtDialog = nullptr;
