@@ -19,6 +19,10 @@ ColorEditor::ColorEditor( QWidget* parent )
 	connect( dsb_blue, SIGNAL( valueChanged( double ) ), SLOT( onFloatColorChanged( double ) ) );
 	connect( dsb_alpha, SIGNAL( valueChanged( double ) ), SLOT( onFloatColorChanged( double ) ) );
 
+	connect( dsb_hueHSL, SIGNAL( valueChanged( double ) ), SLOT( onHSLChanged( double ) ) );
+	connect( dsb_satHSL, SIGNAL( valueChanged( double ) ), SLOT( onHSLChanged( double ) ) );
+	connect( dsb_ligHSL, SIGNAL( valueChanged( double ) ), SLOT( onHSLChanged( double ) ) );
+
 	connect( le_htmlA, &QLineEdit::textChanged, this, &ColorEditor::onAHTMLChanged);
 }
 
@@ -29,18 +33,27 @@ void ColorEditor::onDialogColorChanged( const QColor &color )
 	dsb_blue->blockSignals( true );
 	dsb_alpha->blockSignals( true );
 	le_htmlA->blockSignals( true );
+	dsb_hueHSL->blockSignals( true );
+	dsb_satHSL->blockSignals( true );
+	dsb_ligHSL->blockSignals( true );
 
 	dsb_red->setValue( color.redF() );
 	dsb_green->setValue( color.greenF() );
 	dsb_blue->setValue( color.blueF() );
 	dsb_alpha->setValue( color.alphaF() );
 	le_htmlA->setText( color.name( QColor::HexArgb ) );
+	dsb_hueHSL->setValue( color.hslHueF() * 359.0 );
+	dsb_satHSL->setValue( color.hslSaturationF() );
+	dsb_ligHSL->setValue( color.lightnessF() );
 
 	dsb_red->blockSignals( false );
 	dsb_green->blockSignals( false );
 	dsb_blue->blockSignals( false );
 	dsb_alpha->blockSignals( false );
 	le_htmlA->blockSignals( false );
+	dsb_hueHSL->blockSignals( false );
+	dsb_satHSL->blockSignals( false );
+	dsb_ligHSL->blockSignals( false );
 }
 
 void ColorEditor::onFloatColorChanged( double pValue )
@@ -82,4 +95,13 @@ void ColorEditor::onAHTMLChanged( const QString& text )
 void ColorEditor::setCurrentColor( const QColor& pColor )
 {
 	m_qtDialog->setCurrentColor( pColor );
+}
+
+void ColorEditor::onHSLChanged( double pValue )
+{
+	QColor col(m_qtDialog->currentColor());
+	
+	col.setHslF( dsb_hueHSL->value() / 359.0, dsb_satHSL->value(), dsb_ligHSL->value() );
+	// ...
+	m_qtDialog->setCurrentColor( col );
 }
