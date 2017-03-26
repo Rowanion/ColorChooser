@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QColorDialog>
 #include <QtGui/QClipboard>
+#include <QtCore/QRegExp>
 
 ColorEditor::ColorEditor( QWidget* parent )
 : QWidget( parent )
@@ -134,6 +135,22 @@ void ColorEditor::onActionSelected( int pIdx )
 			QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
 		}
 		break;
+		case 5: // paste as Float (r, g, b)
+		{
+			//TODO:
+			QRegExp regex( "\\(?\\s*([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]*([0-9\\.]+)?[fd]?\\s*.*\\)?" );
+			if( regex.indexIn( QApplication::clipboard()->text() ) != -1 )
+			{
+				float rgba[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+				for( int i=1; i<regex.captureCount(); ++i )
+				{
+					rgba[i-1] = regex.cap(i).toFloat();
+				}
+				QColor col;
+				col.setRgbF( rgba[0], rgba[1], rgba[2], rgba[3] );
+				m_qtDialog->setCurrentColor( col );
+			}
+		}
 	}
 	
 	cbb_actions->blockSignals( true );

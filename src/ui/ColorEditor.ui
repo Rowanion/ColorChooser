@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>488</height>
+    <width>532</width>
+    <height>456</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -214,7 +214,7 @@
      <item>
       <widget class="QComboBox" name="cbb_actions">
        <property name="currentIndex">
-        <number>-1</number>
+        <number>0</number>
        </property>
        <item>
         <property name="text">
@@ -234,6 +234,16 @@
        <item>
         <property name="text">
          <string>copy as Float (r, g, b)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>------------------------------</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>paste as Float (r, g, b)</string>
         </property>
        </item>
       </widget>
