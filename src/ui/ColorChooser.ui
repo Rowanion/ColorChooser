@@ -110,11 +110,62 @@
      <x>0</x>
      <y>0</y>
      <width>343</width>
-     <height>21</height>
+     <height>27</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuCopy">
+    <property name="title">
+     <string>Copy</string>
+    </property>
+    <addaction name="actionCopy_As_Hex_RGB"/>
+    <addaction name="actionCopy_As_Hex_ARGB"/>
+    <addaction name="actionCopy_As_Byte_RGB"/>
+    <addaction name="actionCopy_As_Float_RGB"/>
+   </widget>
+   <widget class="QMenu" name="menuPaste">
+    <property name="title">
+     <string>Paste</string>
+    </property>
+    <addaction name="actionPaste_From_Float_RGB"/>
+   </widget>
+   <widget class="QMenu" name="menuConvert">
+    <property name="title">
+     <string>Convert</string>
+    </property>
+   </widget>
+   <addaction name="menuCopy"/>
+   <addaction name="menuPaste"/>
+   <addaction name="menuConvert"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionCopy_As_Hex_RGB">
+   <property name="text">
+    <string>as Hex RGB</string>
+   </property>
+   <property name="toolTip">
+    <string>as Hex RGB</string>
+   </property>
+  </action>
+  <action name="actionCopy_As_Hex_ARGB">
+   <property name="text">
+    <string>as Hex ARGB</string>
+   </property>
+  </action>
+  <action name="actionCopy_As_Byte_RGB">
+   <property name="text">
+    <string>as Byte RGB</string>
+   </property>
+  </action>
+  <action name="actionCopy_As_Float_RGB">
+   <property name="text">
+    <string>as Float RGB</string>
+   </property>
+  </action>
+  <action name="actionPaste_From_Float_RGB">
+   <property name="text">
+    <string>from Float RGB</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

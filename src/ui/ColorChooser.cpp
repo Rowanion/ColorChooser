@@ -117,11 +117,70 @@ void ColorChooser::copyFloatRGBColor()
 	QColor color( m_currentColor );
 	qreal rgb[3];
 	color.getRgbF(rgb, rgb+1, rgb+2);
-	QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+	QString red(QString::number(rgb[0]));
+	QString green(QString::number(rgb[1]));
+	QString blue(QString::number(rgb[2]));
+	// add trailing 0 decimals
+	if(floor(rgb[0]) == ceil(rgb[0])) red.append(QLatin1String(".0"));
+	if(floor(rgb[1]) == ceil(rgb[1])) green.append(QLatin1String(".0"));
+	if(floor(rgb[2]) == ceil(rgb[2])) blue.append(QLatin1String(".0"));
+	QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( red ).arg( green ).arg( blue ) );
 }
 
 void ColorChooser::onTableClicked( const QModelIndex& pIndex )
 {
 	m_currentColor = m_model->data( m_model->index( pIndex.row(), 0 ), Qt::UserRole ).toString();
 	w_colorEditor->setCurrentColor( QColor( m_currentColor ) );
+}
+
+void ColorChooser::on_actionCopy_As_Hex_RGB_triggered()
+{
+	const QColor color = w_colorEditor->getCurrentColor();
+	QApplication::clipboard()->setText( color.name( QColor::HexRgb ) );
+}
+
+void ColorChooser::on_actionCopy_As_Hex_ARGB_triggered()
+{
+	const QColor color = w_colorEditor->getCurrentColor();
+	QApplication::clipboard()->setText( color.name( QColor::HexArgb ) );
+}
+
+void ColorChooser::on_actionCopy_As_Byte_RGB_triggered()
+{
+	const QColor color = w_colorEditor->getCurrentColor();
+	int rgb[3];
+	color.getRgb(rgb, rgb+1, rgb+2);
+	QApplication::clipboard()->setText( QString( "%1, %2, %3" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+}
+
+void ColorChooser::on_actionCopy_As_Float_RGB_triggered()
+{
+	const QColor color = w_colorEditor->getCurrentColor();
+	qreal rgb[3];
+	color.getRgbF(rgb, rgb+1, rgb+2);
+	QString red(QString::number(rgb[0]));
+	QString green(QString::number(rgb[1]));
+	QString blue(QString::number(rgb[2]));
+	// add trailing 0 decimals
+	if(floor(rgb[0]) == ceil(rgb[0])) red.append(QLatin1String(".0"));
+	if(floor(rgb[1]) == ceil(rgb[1])) green.append(QLatin1String(".0"));
+	if(floor(rgb[2]) == ceil(rgb[2])) blue.append(QLatin1String(".0"));
+	QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( red ).arg( green ).arg( blue ) );
+}
+
+void ColorChooser::on_actionPaste_From_Float_RGB_triggered()
+{
+	//TODO:
+	QRegExp regex( "\\(?\\s*([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]*([0-9\\.]+)?[fd]?\\s*.*\\)?" );
+	if( regex.indexIn( QApplication::clipboard()->text() ) != -1 )
+	{
+		float rgba[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+		for( int i=1; i<regex.captureCount(); ++i )
+		{
+			rgba[i-1] = regex.cap(i).toFloat();
+		}
+		QColor col;
+		col.setRgbF( rgba[0], rgba[1], rgba[2], rgba[3] );
+		w_colorEditor->setCurrentColor( col );
+	}
 }

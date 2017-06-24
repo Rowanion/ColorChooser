@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>532</width>
+    <width>544</width>
     <height>456</height>
    </rect>
   </property>
@@ -207,45 +207,15 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Actions:</string>
+        <string>REMOVE</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cbb_actions">
-       <property name="currentIndex">
-        <number>0</number>
+      <widget class="QPushButton" name="pb_invert">
+       <property name="text">
+        <string>Invert</string>
        </property>
-       <item>
-        <property name="text">
-         <string>copy as #RRGGBB</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>copy as #AARRGGBB</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>copy as Byte (r, g, b)</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>copy as Float (r, g, b)</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>------------------------------</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>paste as Float (r, g, b)</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item>

@@ -16,8 +16,6 @@ ColorEditor::ColorEditor( QWidget* parent )
 	onDialogColorChanged( m_qtDialog->currentColor() );
 	connect( m_qtDialog, &QColorDialog::currentColorChanged, this, &ColorEditor::onDialogColorChanged );
 
-	connect( cbb_actions, SIGNAL( currentIndexChanged(int) ), this, SLOT( onActionSelected(int) ) );
-
 	connect( dsb_red, SIGNAL(valueChanged(double) ), SLOT(onFloatColorChanged(double) ) );
 	connect( dsb_green, SIGNAL( valueChanged( double ) ), SLOT( onFloatColorChanged( double ) ) );
 	connect( dsb_blue, SIGNAL( valueChanged( double ) ), SLOT( onFloatColorChanged( double ) ) );
@@ -29,10 +27,6 @@ ColorEditor::ColorEditor( QWidget* parent )
 
 	connect( le_htmlA, &QLineEdit::textChanged, this, &ColorEditor::onAHTMLChanged);
 	setCurrentColor( QColor(0, 0, 0, 255) );
-
-	cbb_actions->blockSignals( true );
-	cbb_actions->setCurrentIndex( -1 );
-	cbb_actions->blockSignals( false );
 }
 
 void ColorEditor::onDialogColorChanged( const QColor &color )
@@ -113,58 +107,17 @@ void ColorEditor::onHSLChanged( double pValue )
 	m_qtDialog->setCurrentColor( col );
 }
 
-void ColorEditor::onActionSelected( int pIdx )
+const QColor ColorEditor::getCurrentColor() const
 {
-	switch(pIdx)
-	{
-		case 0:	// copy as #RRGGBB
-			QApplication::clipboard()->setText( m_qtDialog->currentColor().name( QColor::HexRgb ) );
-		break;
-		case 1: // copy as #AARRGGBB
-			QApplication::clipboard()->setText( m_qtDialog->currentColor().name( QColor::HexArgb ) );
-		break;
-		case 2: // copy as Byte (r, g, b)
-		{
-			QColor color( m_qtDialog->currentColor() );
-			int rgb[3];
-			color.getRgb(rgb, rgb+1, rgb+2);
-			QApplication::clipboard()->setText( QString( "%1, %2, %3" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
-		}
-		break;
-		case 3: // copy as Float (r, g, b)
-		{
-			QColor color( m_qtDialog->currentColor() );
-			qreal rgb[3];
-			color.getRgbF(rgb, rgb+1, rgb+2);
-			QString red(QString::number(rgb[0]));
-			QString green(QString::number(rgb[1]));
-			QString blue(QString::number(rgb[2]));
-			// add trailing 0 decimals
-			if(floor(rgb[0]) == ceil(rgb[0])) red.append(QLatin1String(".0"));
-			if(floor(rgb[1]) == ceil(rgb[1])) green.append(QLatin1String(".0"));
-			if(floor(rgb[2]) == ceil(rgb[2])) blue.append(QLatin1String(".0"));
-			QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( red ).arg( green ).arg( blue ) );
-		}
-		break;
-		case 5: // paste as Float (r, g, b)
-		{
-			//TODO:
-			QRegExp regex( "\\(?\\s*([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]*([0-9\\.]+)?[fd]?\\s*.*\\)?" );
-			if( regex.indexIn( QApplication::clipboard()->text() ) != -1 )
-			{
-				float rgba[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-				for( int i=1; i<regex.captureCount(); ++i )
-				{
-					rgba[i-1] = regex.cap(i).toFloat();
-				}
-				QColor col;
-				col.setRgbF( rgba[0], rgba[1], rgba[2], rgba[3] );
-				m_qtDialog->setCurrentColor( col );
-			}
-		}
-	}
-	
-	cbb_actions->blockSignals( true );
-	cbb_actions->setCurrentIndex( -1 );
-	cbb_actions->blockSignals( false );
+	return m_qtDialog->currentColor();
+}
+
+void ColorEditor::on_pb_invert_clicked()
+{
+	qDebug("here");
+	qreal rgb[3];
+	m_qtDialog->currentColor().getRgbF(rgb, rgb+1, rgb+2);
+	QColor color;
+	color.setRgbF(1.0f - rgb[0], 1.0f - rgb[1], 1.0f - rgb[2]);
+	m_qtDialog->setCurrentColor(color);
 }
