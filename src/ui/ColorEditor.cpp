@@ -29,6 +29,10 @@ ColorEditor::ColorEditor( QWidget* parent )
 
 	connect( le_htmlA, &QLineEdit::textChanged, this, &ColorEditor::onAHTMLChanged);
 	setCurrentColor( QColor(0, 0, 0, 255) );
+
+	cbb_actions->blockSignals( true );
+	cbb_actions->setCurrentIndex( -1 );
+	cbb_actions->blockSignals( false );
 }
 
 void ColorEditor::onDialogColorChanged( const QColor &color )
