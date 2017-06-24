@@ -132,7 +132,14 @@ void ColorEditor::onActionSelected( int pIdx )
 			QColor color( m_qtDialog->currentColor() );
 			qreal rgb[3];
 			color.getRgbF(rgb, rgb+1, rgb+2);
-			QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+			QString red(QString::number(rgb[0]));
+			QString green(QString::number(rgb[1]));
+			QString blue(QString::number(rgb[2]));
+			// add trailing 0 decimals
+			if(floor(rgb[0]) == ceil(rgb[0])) red.append(QLatin1String(".0"));
+			if(floor(rgb[1]) == ceil(rgb[1])) green.append(QLatin1String(".0"));
+			if(floor(rgb[2]) == ceil(rgb[2])) blue.append(QLatin1String(".0"));
+			QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( red ).arg( green ).arg( blue ) );
 		}
 		break;
 		case 5: // paste as Float (r, g, b)
