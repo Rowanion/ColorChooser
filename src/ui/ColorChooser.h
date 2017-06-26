@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <QtCore/QTimer>
 #include "ui_ColorChooser.h"
 
 class ColorChooser : public QMainWindow, public Ui_ColorChooser
@@ -24,8 +25,11 @@ private slots:
 	void on_actionCopy_As_Byte_RGB_triggered();
 	void on_actionCopy_As_Float_RGB_triggered();
 	void on_actionPaste_From_Float_RGB_triggered();
+	void onUpdateClipboardContents();
 
 private:
 	class QStandardItemModel* m_model{ nullptr };
 	QString m_currentColor;
+	QTimer m_clipboardTimer;
+	class QLabel* m_clipboardContent = nullptr;
 };

@@ -11,6 +11,8 @@
 #include <QtWidgets/QColorDialog>
 #include "ColorEditor.h"
 #include <QtWidgets/QCheckBox>
+#include <QtCore/QString>
+#include <QtCore/QStringBuilder>
 
 ColorChooser::ColorChooser(QWidget* parent)
 : QMainWindow(parent)
@@ -27,6 +29,14 @@ ColorChooser::ColorChooser(QWidget* parent)
 
 	w_colorEditor->setVisible( false );
 	line->setVisible( false );
+
+	m_clipboardContent = new QLabel();
+	statusbar->addWidget(m_clipboardContent);
+	connect(&m_clipboardTimer, &QTimer::timeout, this, &ColorChooser::onUpdateClipboardContents);
+	m_clipboardTimer.setInterval( 1000 );
+	m_clipboardTimer.setSingleShot(false);
+	m_clipboardTimer.start();
+	onUpdateClipboardContents();
 
 	// setup the table
 	m_model = new QStandardItemModel(this);
@@ -183,4 +193,9 @@ void ColorChooser::on_actionPaste_From_Float_RGB_triggered()
 		col.setRgbF( rgba[0], rgba[1], rgba[2], rgba[3] );
 		w_colorEditor->setCurrentColor( col );
 	}
+}
+
+void ColorChooser::onUpdateClipboardContents()
+{
+	m_clipboardContent->setText(QString(QLatin1String("@Clipboard: \"%1\"")).arg(QApplication::clipboard()->text()));
 }
