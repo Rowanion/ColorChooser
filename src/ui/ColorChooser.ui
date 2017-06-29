@@ -127,11 +127,20 @@
      <string>Paste</string>
     </property>
     <addaction name="actionPaste_From_Float_RGB"/>
+    <addaction name="actionPaste_From_Byte_RGB"/>
    </widget>
    <widget class="QMenu" name="menuConvert">
     <property name="title">
      <string>Convert</string>
     </property>
+    <addaction name="actionByteToFloat"/>
+    <addaction name="actionFloatToByte"/>
+    <addaction name="separator"/>
+    <addaction name="actionHexToFloat"/>
+    <addaction name="actionFloatToHex"/>
+    <addaction name="separator"/>
+    <addaction name="actionHexToByte"/>
+    <addaction name="actionByteToHex"/>
    </widget>
    <addaction name="menuCopy"/>
    <addaction name="menuPaste"/>
@@ -164,6 +173,41 @@
   <action name="actionPaste_From_Float_RGB">
    <property name="text">
     <string>from Float RGB</string>
+   </property>
+  </action>
+  <action name="actionByteToFloat">
+   <property name="text">
+    <string>Byte -&gt; Float</string>
+   </property>
+  </action>
+  <action name="actionFloatToByte">
+   <property name="text">
+    <string>Float -&gt; Byte</string>
+   </property>
+  </action>
+  <action name="actionHexToFloat">
+   <property name="text">
+    <string>Hex -&gt; Float</string>
+   </property>
+  </action>
+  <action name="actionFloatToHex">
+   <property name="text">
+    <string>Float -&gt; Hex</string>
+   </property>
+  </action>
+  <action name="actionHexToByte">
+   <property name="text">
+    <string>Hex -&gt; Byte</string>
+   </property>
+  </action>
+  <action name="actionByteToHex">
+   <property name="text">
+    <string>Byte -&gt; Hex</string>
+   </property>
+  </action>
+  <action name="actionPaste_From_Byte_RGB">
+   <property name="text">
+    <string>from Byte RGB</string>
    </property>
   </action>
  </widget>

@@ -116,25 +116,12 @@ void ColorChooser::copyHexARGBColor()
 
 void ColorChooser::copyByteRGBColor()
 {
-	QColor color( m_currentColor );
-	int rgb[3];
-	color.getRgb(rgb, rgb+1, rgb+2);
-	QApplication::clipboard()->setText( QString( "%1, %2, %3" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+	QApplication::clipboard()->setText( colorToByteString( m_currentColor ) );
 }
 
 void ColorChooser::copyFloatRGBColor()
 {
-	QColor color( m_currentColor );
-	qreal rgb[3];
-	color.getRgbF(rgb, rgb+1, rgb+2);
-	QString red(QString::number(rgb[0]));
-	QString green(QString::number(rgb[1]));
-	QString blue(QString::number(rgb[2]));
-	// add trailing 0 decimals
-	if(floor(rgb[0]) == ceil(rgb[0])) red.append(QLatin1String(".0"));
-	if(floor(rgb[1]) == ceil(rgb[1])) green.append(QLatin1String(".0"));
-	if(floor(rgb[2]) == ceil(rgb[2])) blue.append(QLatin1String(".0"));
-	QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( red ).arg( green ).arg( blue ) );
+	QApplication::clipboard()->setText( colorToFloatString( m_currentColor ) );
 }
 
 void ColorChooser::onTableClicked( const QModelIndex& pIndex )
@@ -157,17 +144,72 @@ void ColorChooser::on_actionCopy_As_Hex_ARGB_triggered()
 
 void ColorChooser::on_actionCopy_As_Byte_RGB_triggered()
 {
-	const QColor color = w_colorEditor->getCurrentColor();
-	int rgb[3];
-	color.getRgb(rgb, rgb+1, rgb+2);
-	QApplication::clipboard()->setText( QString( "%1, %2, %3" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) ) );
+	QApplication::clipboard()->setText( colorToByteString( w_colorEditor->getCurrentColor() ) );
 }
 
 void ColorChooser::on_actionCopy_As_Float_RGB_triggered()
 {
-	const QColor color = w_colorEditor->getCurrentColor();
+	QApplication::clipboard()->setText( colorToFloatString( w_colorEditor->getCurrentColor() ) );
+}
+
+void ColorChooser::on_actionPaste_From_Float_RGB_triggered()
+{
+	w_colorEditor->setCurrentColor( floatStringToColor( QApplication::clipboard()->text() ) );
+}
+
+void ColorChooser::on_actionPaste_From_Byte_RGB_triggered()
+{
+	w_colorEditor->setCurrentColor( byteStringToColor(QApplication::clipboard()->text()) );
+}
+
+void ColorChooser::onUpdateClipboardContents()
+{
+	m_clipboardContent->setText(QString(QLatin1String("@Clipboard: \"%1\"")).arg(QApplication::clipboard()->text()));
+}
+
+void ColorChooser::on_actionByteToFloat_triggered()
+{
+	QColor color = byteStringToColor( QApplication::clipboard()->text() );
+	QApplication::clipboard()->setText( colorToFloatString( color ) );
+}
+
+QColor ColorChooser::floatStringToColor( const QString& pString )
+{
+	//TODO:
+	QColor color;
+	QRegExp regex( "\\(?\\s*([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]*([0-9\\.]+)?[fd]?\\s*.*\\)?" );
+	if( regex.indexIn( pString) != -1 )
+	{
+		float rgba[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+		for( int i=1; i<regex.captureCount(); ++i )
+		{
+			rgba[i-1] = regex.cap(i).toFloat();
+		}
+		color.setRgbF( rgba[0], rgba[1], rgba[2], rgba[3] );
+	}
+	return color;
+}
+
+QColor ColorChooser::byteStringToColor( const QString& pString )
+{
+	QColor color;
+	QRegExp regex( "\\(?\\s*([0-9]+)[\\s,]+([0-9]+)[\\s,]+([0-9]+)[\\s,]*([0-9]+)?\\s*.*\\)?" );
+	if( regex.indexIn( pString ) != -1 )
+	{
+		unsigned char rgba[4] = {0, 0, 0, 255};
+		for( int i=1; i<regex.captureCount(); ++i )
+		{
+			rgba[i-1] = regex.cap(i).toUInt();
+		}
+		color.setRgb( rgba[0], rgba[1], rgba[2], rgba[3] );
+	}
+	return color;
+}
+
+const QString ColorChooser::colorToFloatString( const QColor& pColor )
+{
 	qreal rgb[3];
-	color.getRgbF(rgb, rgb+1, rgb+2);
+	pColor.getRgbF(rgb, rgb+1, rgb+2);
 	QString red(QString::number(rgb[0]));
 	QString green(QString::number(rgb[1]));
 	QString blue(QString::number(rgb[2]));
@@ -175,27 +217,12 @@ void ColorChooser::on_actionCopy_As_Float_RGB_triggered()
 	if(floor(rgb[0]) == ceil(rgb[0])) red.append(QLatin1String(".0"));
 	if(floor(rgb[1]) == ceil(rgb[1])) green.append(QLatin1String(".0"));
 	if(floor(rgb[2]) == ceil(rgb[2])) blue.append(QLatin1String(".0"));
-	QApplication::clipboard()->setText( QString( "%1f, %2f, %3f" ).arg( red ).arg( green ).arg( blue ) );
+	return QString( "%1f, %2f, %3f" ).arg( red ).arg( green ).arg( blue );
 }
 
-void ColorChooser::on_actionPaste_From_Float_RGB_triggered()
+const QString ColorChooser::colorToByteString( const QColor& pColor )
 {
-	//TODO:
-	QRegExp regex( "\\(?\\s*([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]*([0-9\\.]+)?[fd]?\\s*.*\\)?" );
-	if( regex.indexIn( QApplication::clipboard()->text() ) != -1 )
-	{
-		float rgba[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-		for( int i=1; i<regex.captureCount(); ++i )
-		{
-			rgba[i-1] = regex.cap(i).toFloat();
-		}
-		QColor col;
-		col.setRgbF( rgba[0], rgba[1], rgba[2], rgba[3] );
-		w_colorEditor->setCurrentColor( col );
-	}
-}
-
-void ColorChooser::onUpdateClipboardContents()
-{
-	m_clipboardContent->setText(QString(QLatin1String("@Clipboard: \"%1\"")).arg(QApplication::clipboard()->text()));
+	int rgb[3];
+	pColor.getRgb(rgb, rgb+1, rgb+2);
+	return QString( "%1, %2, %3" ).arg( QString::number(rgb[0]) ).arg( QString::number(rgb[1]) ).arg( QString::number(rgb[2]) );
 }
