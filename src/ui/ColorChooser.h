@@ -28,6 +28,11 @@ private slots:
 	void on_actionPaste_From_Byte_RGB_triggered();
 	void onUpdateClipboardContents();
 	void on_actionByteToFloat_triggered();
+	void on_actionFloatToByte_triggered();
+	void on_actionByteToHex_triggered();
+	void on_actionHexToByte_triggered();
+	void on_actionFloatToHex_triggered();
+	void on_actionHexToFloat_triggered();
 
 private:
 	class QStandardItemModel* m_model{ nullptr };

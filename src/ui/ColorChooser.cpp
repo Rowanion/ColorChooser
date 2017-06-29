@@ -164,12 +164,49 @@ void ColorChooser::on_actionPaste_From_Byte_RGB_triggered()
 
 void ColorChooser::onUpdateClipboardContents()
 {
-	m_clipboardContent->setText(QString(QLatin1String("@Clipboard: \"%1\"")).arg(QApplication::clipboard()->text()));
+	QString cb = QApplication::clipboard()->text().remove(QLatin1String("\n"));
+	if( cb.size() > 50 )
+	{
+		cb = cb.left(50) % QLatin1String( "..." );
+	}
+	m_clipboardContent->setText(QString(QLatin1String("@Clipboard: \"%1\"")).arg( cb ));
 }
 
 void ColorChooser::on_actionByteToFloat_triggered()
 {
 	QColor color = byteStringToColor( QApplication::clipboard()->text() );
+	QApplication::clipboard()->setText( colorToFloatString( color ) );
+}
+
+void ColorChooser::on_actionFloatToByte_triggered()
+{
+	QColor color = floatStringToColor( QApplication::clipboard()->text() );
+	QApplication::clipboard()->setText( colorToByteString( color ) );
+}
+
+void ColorChooser::on_actionByteToHex_triggered()
+{
+	QColor color = byteStringToColor( QApplication::clipboard()->text() );
+	QApplication::clipboard()->setText( color.name( QColor::HexRgb ) );
+}
+
+void ColorChooser::on_actionFloatToHex_triggered()
+{
+	QColor color = floatStringToColor( QApplication::clipboard()->text() );
+	QApplication::clipboard()->setText( color.name( QColor::HexRgb ) );
+}
+
+void ColorChooser::on_actionHexToByte_triggered()
+{
+	QColor color;
+	color.setNamedColor( QApplication::clipboard()->text() );
+	QApplication::clipboard()->setText( colorToByteString( color ) );
+}
+
+void ColorChooser::on_actionHexToFloat_triggered()
+{
+	QColor color;
+	color.setNamedColor( QApplication::clipboard()->text() );
 	QApplication::clipboard()->setText( colorToFloatString( color ) );
 }
 
