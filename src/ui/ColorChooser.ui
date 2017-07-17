@@ -110,7 +110,7 @@
      <x>0</x>
      <y>0</y>
      <width>343</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCopy">
@@ -177,32 +177,50 @@
   </action>
   <action name="actionByteToFloat">
    <property name="text">
-    <string>Byte -&gt; Float</string>
+    <string>Byte → Float</string>
+   </property>
+   <property name="toolTip">
+    <string>Byte → Float</string>
    </property>
   </action>
   <action name="actionFloatToByte">
    <property name="text">
-    <string>Float -&gt; Byte</string>
+    <string>Float → Byte</string>
+   </property>
+   <property name="toolTip">
+    <string>Float → Byte</string>
    </property>
   </action>
   <action name="actionHexToFloat">
    <property name="text">
-    <string>Hex -&gt; Float</string>
+    <string>Hex → Float</string>
+   </property>
+   <property name="toolTip">
+    <string>Hex → Float</string>
    </property>
   </action>
   <action name="actionFloatToHex">
    <property name="text">
-    <string>Float -&gt; Hex</string>
+    <string>Float → Hex</string>
+   </property>
+   <property name="toolTip">
+    <string>Float → Hex</string>
    </property>
   </action>
   <action name="actionHexToByte">
    <property name="text">
-    <string>Hex -&gt; Byte</string>
+    <string>Hex → Byte</string>
+   </property>
+   <property name="toolTip">
+    <string>Hex → Byte</string>
    </property>
   </action>
   <action name="actionByteToHex">
    <property name="text">
-    <string>Byte -&gt; Hex</string>
+    <string>Byte → Hex</string>
+   </property>
+   <property name="toolTip">
+    <string>Byte → Hex</string>
    </property>
   </action>
   <action name="actionPaste_From_Byte_RGB">
