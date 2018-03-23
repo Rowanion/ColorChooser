@@ -128,6 +128,7 @@
     </property>
     <addaction name="actionPaste_From_Float_RGB"/>
     <addaction name="actionPaste_From_Byte_RGB"/>
+    <addaction name="actionPaste_From_Color_Name"/>
    </widget>
    <widget class="QMenu" name="menuConvert">
     <property name="title">
@@ -226,6 +227,11 @@
   <action name="actionPaste_From_Byte_RGB">
    <property name="text">
     <string>from Byte RGB</string>
+   </property>
+  </action>
+  <action name="actionPaste_From_Color_Name">
+   <property name="text">
+    <string>from color name</string>
    </property>
   </action>
  </widget>

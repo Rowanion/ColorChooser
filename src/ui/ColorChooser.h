@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QtWidgets/QMainWindow>
-#include <QtCore/QTimer>
 #include "ui_ColorChooser.h"
+#include <QtCore/QTimer>
+#include <QtWidgets/QMainWindow>
 
 class ColorChooser : public QMainWindow, public Ui_ColorChooser
 {
@@ -26,6 +26,7 @@ private slots:
 	void on_actionCopy_As_Float_RGB_triggered();
 	void on_actionPaste_From_Float_RGB_triggered();
 	void on_actionPaste_From_Byte_RGB_triggered();
+   void on_actionPaste_From_Color_Name_triggered();
 	void onUpdateClipboardContents();
 	void on_actionByteToFloat_triggered();
 	void on_actionFloatToByte_triggered();
