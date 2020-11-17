@@ -121,6 +121,7 @@
     <addaction name="actionCopy_As_Hex_ARGB"/>
     <addaction name="actionCopy_As_Byte_RGB"/>
     <addaction name="actionCopy_As_Float_RGB"/>
+    <addaction name="actionCopy_As_UE4_Float"/>
    </widget>
    <widget class="QMenu" name="menuPaste">
     <property name="title">
@@ -128,6 +129,7 @@
     </property>
     <addaction name="actionPaste_From_Float_RGB"/>
     <addaction name="actionPaste_From_Byte_RGB"/>
+    <addaction name="actionPaste_From_UE4_Float"/>
    </widget>
    <widget class="QMenu" name="menuConvert">
     <property name="title">
@@ -226,6 +228,16 @@
   <action name="actionPaste_From_Byte_RGB">
    <property name="text">
     <string>from Byte RGB</string>
+   </property>
+  </action>
+  <action name="actionCopy_As_UE4_Float">
+   <property name="text">
+    <string>as UE4 Float</string>
+   </property>
+  </action>
+  <action name="actionPaste_From_UE4_Float">
+   <property name="text">
+    <string>from UE4 Float</string>
    </property>
   </action>
  </widget>
