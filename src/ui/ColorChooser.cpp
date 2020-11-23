@@ -1,4 +1,4 @@
-﻿#include "ColorChooser.h"
+#include "ColorChooser.h"
 
 #include <QtGui/QStandardItemModel>
 #include <QtGui/QStandardItem>
@@ -165,6 +165,11 @@ void ColorChooser::on_actionPaste_From_Float_RGB_triggered()
 void ColorChooser::on_actionPaste_From_Byte_RGB_triggered()
 {
    w_colorEditor->setCurrentColor(byteStringToColor(QApplication::clipboard()->text()));
+}
+
+void ColorChooser::on_actionPaste_From_Color_Name_triggered()
+{
+   w_colorEditor->setCurrentColor(std::move(QApplication::clipboard()->text()));
 }
 
 void ColorChooser::on_actionPaste_From_UE4_Float_triggered()

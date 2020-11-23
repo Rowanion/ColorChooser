@@ -130,6 +130,7 @@
     <addaction name="actionPaste_From_Float_RGB"/>
     <addaction name="actionPaste_From_Byte_RGB"/>
     <addaction name="actionPaste_From_UE4_Float"/>
+    <addaction name="actionPaste_From_Color_Name"/>
    </widget>
    <widget class="QMenu" name="menuConvert">
     <property name="title">
@@ -238,6 +239,11 @@
   <action name="actionPaste_From_UE4_Float">
    <property name="text">
     <string>from UE4 Float</string>
+   </property>
+  </action>
+  <action name="actionPaste_From_Color_Name">
+   <property name="text">
+    <string>from color name</string>
    </property>
   </action>
  </widget>

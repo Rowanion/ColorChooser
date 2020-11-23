@@ -28,6 +28,7 @@ private slots:
    void on_actionPaste_From_Float_RGB_triggered();
    void on_actionPaste_From_Byte_RGB_triggered();
    void on_actionPaste_From_UE4_Float_triggered();
+   void on_actionPaste_From_Color_Name_triggered();
    void onUpdateClipboardContents();
    void on_actionByteToFloat_triggered();
    void on_actionFloatToByte_triggered();
