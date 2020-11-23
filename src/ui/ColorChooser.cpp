@@ -1,4 +1,4 @@
-#include "ColorChooser.h"
+﻿#include "ColorChooser.h"
 
 #include <QtGui/QStandardItemModel>
 #include <QtGui/QStandardItem>
@@ -228,7 +228,7 @@ QColor ColorChooser::floatStringToColor(const QString& pString)
    if (regex.indexIn(pString) != -1)
    {
       float rgba[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-      for (int i = 1; i < regex.captureCount(); ++i)
+      for (int i = 1; i <= regex.captureCount(); ++i)
       {
          rgba[i - 1] = regex.cap(i).toFloat();
       }
@@ -241,11 +241,11 @@ QColor ColorChooser::ue4StringToColor(const QString& pString)
 {
    // (SpecifiedColor=(R=1.000000,G=1.000000,B=1.000000,A=1.000000),ColorUseRule=UseColor_Specified)
    QColor color;
-   QRegExp regex("\\(SpecifiedColor=\\(R=([0-9\\.]+),G=([0-9\\.]+),B=([0-9\\.]+),A=([0-9\\.]+)");
+   QRegExp regex("R=([0-9\\.]+),G=([0-9\\.]+),B=([0-9\\.]+),A=([0-9\\.]+)\\)");
    if (regex.indexIn(pString) != -1)
    {
       float rgba[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-      for (int i = 1; i < regex.captureCount(); ++i)
+      for (int i = 1; i <= regex.captureCount(); ++i)
       {
          rgba[i - 1] = regex.cap(i).toFloat();
       }
@@ -261,7 +261,7 @@ QColor ColorChooser::byteStringToColor(const QString& pString)
    if (regex.indexIn(pString) != -1)
    {
       unsigned char rgba[4] = { 0, 0, 0, 255 };
-      for (int i = 1; i < regex.captureCount(); ++i)
+      for (int i = 1; i <= regex.captureCount(); ++i)
       {
          rgba[i - 1] = regex.cap(i).toUInt();
       }
@@ -297,7 +297,7 @@ const QString ColorChooser::colorToUE4FloatString(const QColor& pColor)
    if (floor(rgb[1]) == ceil(rgb[1])) green.append(QLatin1String(".0"));
    if (floor(rgb[2]) == ceil(rgb[2])) blue.append(QLatin1String(".0"));
    if (floor(rgb[3]) == ceil(rgb[3])) alpha.append(QLatin1String(".0"));
-   return QString("(SpecifiedColor=(R=%1,G=%2,B=%3,A=%4,ColorUseRule=UseColor_Specified)")
+   return QString("(SpecifiedColor=(R=%1,G=%2,B=%3,A=%4),ColorUseRule=UseColor_Specified)")
       .arg(red)
       .arg(green)
       .arg(blue)
