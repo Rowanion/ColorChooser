@@ -30,7 +30,7 @@ void setStyle()
 
 	darkPalette.setColor( QPalette::Disabled, QPalette::Text, Qt::darkGray );
 	darkPalette.setColor( QPalette::Disabled, QPalette::ButtonText, Qt::darkGray );
-	darkPalette.setColor( QPalette::Disabled, QPalette::Foreground, Qt::darkGray );
+	darkPalette.setColor( QPalette::Disabled, QPalette::WindowText, Qt::darkGray );
 
 	qApp->setPalette( darkPalette );
 
