@@ -13,9 +13,10 @@
 #include <QtWidgets/QCheckBox>
 #include <QtCore/QString>
 #include <QtCore/QStringBuilder>
+#include <cmath>
 
-ColorChooser::ColorChooser(QWidget* parent)
-   : QMainWindow(parent)
+ColorChooser::ColorChooser(QWidget *parent)
+    : QMainWindow(parent)
 {
 
    // force dot as comma for QDoubleSpinBox and float conversion
@@ -23,7 +24,7 @@ ColorChooser::ColorChooser(QWidget* parent)
 
    setupUi(this);
 
-   //TODO: implement
+   // TODO: implement
    l_filter->setVisible(false);
    le_filter->setVisible(false);
 
@@ -43,23 +44,23 @@ ColorChooser::ColorChooser(QWidget* parent)
    tableView->setModel(m_model);
    tableView->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(tableView, &QTableView::customContextMenuRequested, this, &ColorChooser::onCustomContextMenu);
-   QHeaderView* verticalHeader = tableView->verticalHeader();
+   QHeaderView *verticalHeader = tableView->verticalHeader();
    verticalHeader->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(verticalHeader, &QHeaderView::customContextMenuRequested, this, &ColorChooser::onCustomContextMenu);
    connect(cb_showEditor, &QCheckBox::toggled, w_colorEditor, &ColorEditor::setVisible);
    connect(cb_showEditor, &QCheckBox::toggled, line, &QFrame::setVisible);
-   connect(tableView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(onTableClicked(const QModelIndex&)));
+   connect(tableView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onTableClicked(const QModelIndex &)));
 
    QStringList names(QColor::colorNames());
    m_model->setVerticalHeaderLabels(names);
 
    // fill the table
-   QStandardItem* item{ nullptr };
+   QStandardItem *item{nullptr};
    int i = 0;
-   foreach(const QString & name, names)
+   foreach (const QString &name, names)
    {
       const QColor theColor(name);
-      item = new QStandardItem(QLatin1String{ " " });
+      item = new QStandardItem(QLatin1String{" "});
       item->setData(name, Qt::UserRole);
       item->setBackground(QBrush(QColor(theColor)));
       m_model->setItem(i++, item);
@@ -71,13 +72,13 @@ ColorChooser::ColorChooser(QWidget* parent)
 
 ColorChooser::~ColorChooser()
 {
-
 }
 
-void ColorChooser::onCustomContextMenu(const QPoint& point)
+void ColorChooser::onCustomContextMenu(const QPoint &point)
 {
    QModelIndex index = tableView->indexAt(point);
-   if (!index.isValid()) return;
+   if (!index.isValid())
+      return;
 
    // get data
    m_currentColor = m_model->data(index, Qt::UserRole).toString();
@@ -86,7 +87,7 @@ void ColorChooser::onCustomContextMenu(const QPoint& point)
    pixmap.fill(QColor(m_currentColor));
    QIcon anIcon(pixmap);
 
-   //set context menu
+   // set context menu
    QMenu contextMenu(tableView);
    contextMenu.addAction(anIcon, QLatin1String("copy color name"), this, SLOT(copyName()));
    contextMenu.addAction(anIcon, QLatin1String("copy as #RRGGBB"), this, SLOT(copyHexRGBColor()));
@@ -124,7 +125,7 @@ void ColorChooser::copyFloatRGBColor()
    QApplication::clipboard()->setText(colorToFloatString(m_currentColor));
 }
 
-void ColorChooser::onTableClicked(const QModelIndex& pIndex)
+void ColorChooser::onTableClicked(const QModelIndex &pIndex)
 {
    m_currentColor = m_model->data(m_model->index(pIndex.row(), 0), Qt::UserRole).toString();
    w_colorEditor->setCurrentColor(QColor(m_currentColor));
@@ -225,14 +226,14 @@ void ColorChooser::on_actionHexToFloat_triggered()
    QApplication::clipboard()->setText(colorToFloatString(color));
 }
 
-QColor ColorChooser::floatStringToColor(const QString& pString)
+QColor ColorChooser::floatStringToColor(const QString &pString)
 {
-   //TODO:
+   // TODO:
    QColor color;
    QRegExp regex("\\(?\\s*([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]+([0-9\\.]+)[fd]?[\\s,]*([0-9\\.]+)?[fd]?\\s*.*\\)?");
    if (regex.indexIn(pString) != -1)
    {
-      float rgba[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+      float rgba[4] = {0.0f, 0.0f, 0.0f, 1.0f};
       for (int i = 1; i <= regex.captureCount(); ++i)
       {
          rgba[i - 1] = regex.cap(i).toFloat();
@@ -242,14 +243,14 @@ QColor ColorChooser::floatStringToColor(const QString& pString)
    return color;
 }
 
-QColor ColorChooser::ue4StringToColor(const QString& pString)
+QColor ColorChooser::ue4StringToColor(const QString &pString)
 {
    // (SpecifiedColor=(R=1.000000,G=1.000000,B=1.000000,A=1.000000),ColorUseRule=UseColor_Specified)
    QColor color;
    QRegExp regex("R=([0-9\\.]+),G=([0-9\\.]+),B=([0-9\\.]+),A=([0-9\\.]+)\\)");
    if (regex.indexIn(pString) != -1)
    {
-      float rgba[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+      float rgba[4] = {0.0f, 0.0f, 0.0f, 1.0f};
       for (int i = 1; i <= regex.captureCount(); ++i)
       {
          rgba[i - 1] = regex.cap(i).toFloat();
@@ -259,13 +260,13 @@ QColor ColorChooser::ue4StringToColor(const QString& pString)
    return color;
 }
 
-QColor ColorChooser::byteStringToColor(const QString& pString)
+QColor ColorChooser::byteStringToColor(const QString &pString)
 {
    QColor color;
    QRegExp regex("\\(?\\s*([0-9]+)[\\s,]+([0-9]+)[\\s,]+([0-9]+)[\\s,]*([0-9]+)?\\s*.*\\)?");
    if (regex.indexIn(pString) != -1)
    {
-      unsigned char rgba[4] = { 0, 0, 0, 255 };
+      unsigned char rgba[4] = {0, 0, 0, 255};
       for (int i = 1; i <= regex.captureCount(); ++i)
       {
          rgba[i - 1] = regex.cap(i).toUInt();
@@ -275,7 +276,7 @@ QColor ColorChooser::byteStringToColor(const QString& pString)
    return color;
 }
 
-const QString ColorChooser::colorToFloatString(const QColor& pColor)
+const QString ColorChooser::colorToFloatString(const QColor &pColor)
 {
    qreal rgb[3];
    pColor.getRgbF(rgb, rgb + 1, rgb + 2);
@@ -283,13 +284,16 @@ const QString ColorChooser::colorToFloatString(const QColor& pColor)
    QString green(QString::number(rgb[1]));
    QString blue(QString::number(rgb[2]));
    // add trailing 0 decimals
-   if (floor(rgb[0]) == ceil(rgb[0])) red.append(QLatin1String(".0"));
-   if (floor(rgb[1]) == ceil(rgb[1])) green.append(QLatin1String(".0"));
-   if (floor(rgb[2]) == ceil(rgb[2])) blue.append(QLatin1String(".0"));
+   if (floor(rgb[0]) == ceil(rgb[0]))
+      red.append(QLatin1String(".0"));
+   if (floor(rgb[1]) == ceil(rgb[1]))
+      green.append(QLatin1String(".0"));
+   if (floor(rgb[2]) == ceil(rgb[2]))
+      blue.append(QLatin1String(".0"));
    return QString("%1f, %2f, %3f").arg(red).arg(green).arg(blue);
 }
 
-const QString ColorChooser::colorToUE4FloatString(const QColor& pColor)
+const QString ColorChooser::colorToUE4FloatString(const QColor &pColor)
 {
    qreal rgb[4];
    pColor.getRgbF(rgb, rgb + 1, rgb + 2, rgb + 3);
@@ -298,18 +302,22 @@ const QString ColorChooser::colorToUE4FloatString(const QColor& pColor)
    QString blue(QString::number(rgb[2]));
    QString alpha(QString::number(rgb[3]));
    // add trailing 0 decimals
-   if (floor(rgb[0]) == ceil(rgb[0])) red.append(QLatin1String(".0"));
-   if (floor(rgb[1]) == ceil(rgb[1])) green.append(QLatin1String(".0"));
-   if (floor(rgb[2]) == ceil(rgb[2])) blue.append(QLatin1String(".0"));
-   if (floor(rgb[3]) == ceil(rgb[3])) alpha.append(QLatin1String(".0"));
+   if (floor(rgb[0]) == ceil(rgb[0]))
+      red.append(QLatin1String(".0"));
+   if (floor(rgb[1]) == ceil(rgb[1]))
+      green.append(QLatin1String(".0"));
+   if (floor(rgb[2]) == ceil(rgb[2]))
+      blue.append(QLatin1String(".0"));
+   if (floor(rgb[3]) == ceil(rgb[3]))
+      alpha.append(QLatin1String(".0"));
    return QString("(SpecifiedColor=(R=%1,G=%2,B=%3,A=%4),ColorUseRule=UseColor_Specified)")
-      .arg(red)
-      .arg(green)
-      .arg(blue)
-      .arg(alpha);
+       .arg(red)
+       .arg(green)
+       .arg(blue)
+       .arg(alpha);
 }
 
-const QString ColorChooser::colorToByteString(const QColor& pColor)
+const QString ColorChooser::colorToByteString(const QColor &pColor)
 {
    int rgb[3];
    pColor.getRgb(rgb, rgb + 1, rgb + 2);
